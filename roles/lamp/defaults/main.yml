@@ -1,0 +1,28 @@
+---
+lamp_packages:
+  - httpd
+  - mariadb
+  - mariadb-server
+  - php
+  - php-fpm
+  - php-mysqlnd
+  - python3-PyMySQL
+  - git
+
+httpd_service: "httpd"
+mariadb_service: "mariadb"
+php_service: "php-fpm"
+
+http_config_path: "/etc/httpd/conf/httpd.conf"
+mysql_socket: "/var/lib/mysql/mysql.sock"
+
+web_user: "apache"
+web_group: "apache"
+
+httpd_server_root: "/etc/httpd"
+httpd_listen_port: 80
+httpd_server_admin: "root@localhost"
+httpd_document_root: "{{ document_root}}"
+httpd_directory_index: "index.php index.html"
+httpd_user: "apache"
+httpd_group: "apache"

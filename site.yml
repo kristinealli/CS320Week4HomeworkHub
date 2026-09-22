@@ -1,0 +1,26 @@
+---
+- name: Deploy LAMP stack and MariaDB PHP quickstart
+  hosts: linux_vdi
+  gather_facts: true
+  become: true
+  remote_user: kjohnson
+
+  vars_files:
+    - group_vars/common.yml
+
+  vars_prompt:
+    - name: app_db_password
+      prompt: "Enter the MariaDB password for the app user"
+      private: true
+
+  roles:
+    - lamp
+    - app
+
+  tasks:
+    - name: Reboot the server after LAMP deployment
+      ansible.builtin.reboot:
+        msg: "Rebooting after LAMP deployment"
+        reboot_timeout: 300
+      tags:
+        - reboot

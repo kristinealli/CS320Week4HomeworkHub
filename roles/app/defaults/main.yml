@@ -1,0 +1,4 @@
+---
+phpinfo_page: "{{document_root}}/index.php"
+quickstart_schema: "{{app_clone_path}}/schema.sql"
+quickstart_source: "{{app_clone_path}}/src"

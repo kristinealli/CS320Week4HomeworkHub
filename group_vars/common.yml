@@ -1,0 +1,10 @@
+---
+document_root: "/var/www/html"
+app_path: "/var/www/html/app"
+
+app_repo: "https://github.com/mariadb-developers/php-quickstart.git"
+app_clone_path: "/tmp/php-quickstart"
+
+app_db_name: "rolodex"
+app_db_user: "rolodex_user"
+app_db_host: "localhost"

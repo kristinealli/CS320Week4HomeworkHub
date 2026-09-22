@@ -1,0 +1,72 @@
+---
+- name: Ensure application directory exists
+  ansible.builtin.file:
+    path: "{{ app_path }}"
+    state: directory
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: "0755"
+
+- name: Copy phpinfo page to the document root
+  ansible.builtin.copy:
+    src: index.php
+    dest: "{{ phpinfo_page }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Clone the MariaDB PHP quickstart repository
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_clone_path }}"
+    version: main
+    update: true
+    force: true
+
+- name: Check whether the quickstart contacts table already exists
+  community.mysql.mysql_query:
+    login_unix_socket: "{{ mysql_socket }}"
+    query: >-
+      SELECT COUNT(*) AS table_count
+      FROM information_schema.tables
+      WHERE table_schema = '{{ app_db_name }}'
+      AND table_name = 'contacts';
+  register: contacts_table
+  changed_when: false
+
+- name: Import the MariaDB PHP quickstart schema
+  community.mysql.mysql_db:
+    name: all
+    state: import
+    target: "{{ quickstart_schema }}"
+    login_unix_socket: "{{ mysql_socket }}"
+    force: true
+  when: contacts_table.query_result[0][0].table_count | int == 0
+
+- name: Grant the application user access to the quickstart database
+  community.mysql.mysql_user:
+    name: "{{ app_db_user }}"
+    host: "localhost"
+    priv: "{{ app_db_name }}.*:ALL"
+    append_privs: true
+    state: present
+    login_unix_socket: "{{ mysql_socket }}"
+  no_log: true
+
+- name: Deploy the MariaDB PHP quickstart application
+  ansible.builtin.copy:
+    src: "{{ quickstart_source }}/"
+    dest: "{{ app_path }}/"
+    remote_src: true
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: preserve
+
+- name: Configure the PHP application database connection
+  ansible.builtin.template:
+    src: config.php.j2
+    dest: "{{ app_path }}/config.php"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: "0640"
+  no_log: true

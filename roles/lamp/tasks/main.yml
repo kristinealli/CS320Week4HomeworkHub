@@ -1,0 +1,55 @@
+---
+- name: Install LAMP packages
+  ansible.builtin.dnf:
+    name: "{{ lamp_packages }}"
+    state: present
+  become: true
+
+- name: Ensure web root exists
+  ansible.builtin.file:
+    path: "{{ httpd_document_root }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+
+- name: Enable and start MariaDB
+  ansible.builtin.service:
+    name: "{{ mariadb_service }}"
+    state: started
+    enabled: true
+  become: true
+
+- name: Create MariaDB application credentials
+  community.mysql.mysql_user:
+    name: "{{ app_db_user }}"
+    password: "{{ app_db_password }}"
+    host: "localhost"
+    state: present
+    login_unix_socket: "{{ mysql_socket }}"
+  no_log: true
+
+- name: Enable and start PHP-FPM
+  ansible.builtin.service:
+    name: "{{ php_service }}"
+    state: started
+    enabled: true
+ 
+- name: Deploy HTTPD configuration
+  ansible.builtin.template:
+    src: httpd.conf.j2
+    dest: "{{ http_config_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart httpd
+
+- name: Enable and start HTTPD
+  ansible.builtin.service:
+    name: "{{ httpd_service }}"
+    state: started
+    enabled: true
+
+

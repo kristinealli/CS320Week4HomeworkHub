@@ -1,0 +1,15 @@
+<?php
+
+$databaseHost = '{{ app_db_host }}';
+$databaseUsername = '{{ app_db_user }}';
+$databasePassword = '{{ app_db_password }}';
+$databaseName = '{{ app_db_name }}';
+
+$mysqli = mysqli_connect(
+    $databaseHost,
+    $databaseUsername,
+    $databasePassword,
+    $databaseName
+);
+
+?>

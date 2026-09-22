@@ -1,0 +1,60 @@
+
+PLAY [Deploy LAMP stack and MariaDB PHP quickstart] ****************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [tp_cs320_al10]
+
+TASK [lamp : Install LAMP packages] ********************************************
+ok: [tp_cs320_al10]
+
+TASK [lamp : Ensure web root exists] *******************************************
+ok: [tp_cs320_al10]
+
+TASK [lamp : Enable and start MariaDB] *****************************************
+ok: [tp_cs320_al10]
+
+TASK [lamp : Create MariaDB application credentials] ***************************
+changed: [tp_cs320_al10]
+
+TASK [lamp : Enable and start PHP-FPM] *****************************************
+ok: [tp_cs320_al10]
+
+TASK [lamp : Deploy HTTPD configuration] ***************************************
+changed: [tp_cs320_al10]
+
+TASK [lamp : Enable and start HTTPD] *******************************************
+ok: [tp_cs320_al10]
+
+TASK [app : Ensure application directory exists] *******************************
+changed: [tp_cs320_al10]
+
+TASK [app : Copy phpinfo page to the document root] ****************************
+changed: [tp_cs320_al10]
+
+TASK [app : Clone the MariaDB PHP quickstart repository] ***********************
+changed: [tp_cs320_al10]
+
+TASK [app : Check whether the quickstart contacts table already exists] ********
+ok: [tp_cs320_al10]
+
+TASK [app : Import the MariaDB PHP quickstart schema] **************************
+changed: [tp_cs320_al10]
+
+TASK [app : Grant the application user access to the quickstart database] ******
+changed: [tp_cs320_al10]
+
+TASK [app : Deploy the MariaDB PHP quickstart application] *********************
+changed: [tp_cs320_al10]
+
+TASK [app : Configure the PHP application database connection] *****************
+changed: [tp_cs320_al10]
+
+TASK [Reboot the server after LAMP deployment] *********************************
+changed: [tp_cs320_al10]
+
+RUNNING HANDLER [lamp : restart httpd] *****************************************
+changed: [tp_cs320_al10]
+
+PLAY RECAP *********************************************************************
+tp_cs320_al10              : ok=18   changed=11   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
